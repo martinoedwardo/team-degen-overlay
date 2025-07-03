@@ -6,13 +6,15 @@
     <title>Twitch Stream Team Overlay</title>
     <!-- Tailwind CSS CDN for easy styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Anton -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
     <style>
         /* Ensure the body and html take up the full viewport height and width */
         html, body {
             margin: 0;
             padding: 0;
             overflow: hidden; /* Prevent scrollbars */
-            font-family: 'Inter', sans-serif; /* Modern, clean font */
+            font-family: 'Inter', sans-serif; /* Fallback font */
             width: 1920px; /* Standard 1080p width */
             height: 1080px; /* Standard 1080p height */
             display: flex; /* Use flexbox for centering content */
@@ -21,64 +23,50 @@
             background-color: transparent; /* Make background transparent for OBS */
         }
 
-        /* The main overlay container */
+        /* The main overlay container, now acting as the background */
         .overlay-container {
             width: 100%; /* Take full width of the 1920px parent */
             height: 100%; /* Take full height of the 1080px parent */
-            display: flex;
-            flex-direction: column; /* Stack elements vertically */
-            justify-content: space-between; /* Space out top and bottom content */
-            align-items: center; /* Center content horizontally */
-            border: 20px solid; /* Customizable border */
-            border-image: linear-gradient(to right, #6366f1, #a855f7, #ec4899) 1; /* Gradient border */
+            position: relative; /* For absolute positioning of children */
             box-sizing: border-box; /* Include padding and border in the element's total width and height */
-            position: relative; /* For absolute positioning of elements inside */
-            background-color: rgba(0, 0, 0, 0.1); /* Slightly transparent background for the overlay itself */
-            border-radius: 15px; /* Rounded corners for the border */
-        }
-
-        /* Style for the custom image */
-        .custom-image {
-            max-width: 90%; /* Adjust as needed */
-            max-height: 40%; /* Adjust as needed */
-            object-fit: contain; /* Ensure the image fits without distortion */
-            margin-top: 50px; /* Space from the top border */
-            border-radius: 10px; /* Rounded corners for the image */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+            background-image: url('./TD_StreamOverlays_Template.png'); /* Custom border image uploaded to root */
+            background-size: cover; /* Cover the entire container */
+            background-position: center; /* Center the background image */
+            background-repeat: no-repeat; /* Do not repeat the background image */
+            border-radius: 15px; /* Keep rounded corners if desired, though image might override */
         }
 
         /* Style for the team member name */
         .team-member-name {
-            font-size: 8rem; /* Large font size for visibility */
+            font-family: 'Anton', sans-serif; /* Anton font */
+            font-size: 4rem; /* Adjusted font size for the bottom bar */
             font-weight: bold;
-            color: #ffffff; /* White text color */
-            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7); /* Stronger text shadow for readability */
-            margin-bottom: 50px; /* Space from the bottom border */
-            text-align: center;
-            padding: 0 20px; /* Add some horizontal padding */
-            word-break: break-word; /* Break long names */
+            color: #52cb78; /* Specific green color */
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8); /* Stronger text shadow for readability */
+            position: absolute; /* Position absolutely within the overlay-container */
+            bottom: 30px; /* Distance from the bottom edge */
+            left: 200px; /* Distance from the left edge, adjusted to be next to the logo */
+            white-space: nowrap; /* Prevent name from wrapping to multiple lines */
+            overflow: hidden; /* Hide overflow if name is too long */
+            text-overflow: ellipsis; /* Add ellipsis if name is too long */
+            max-width: calc(100% - 250px); /* Ensure it stays within bounds, accounting for left offset and some right margin */
         }
 
         /* Responsive adjustments (though OBS is fixed at 1080p, good practice) */
         @media (max-width: 1920px) {
             .team-member-name {
-                font-size: 6rem; /* Adjust font size for slightly smaller screens if needed */
+                font-size: 3.5rem; /* Adjust font size for slightly smaller screens if needed */
             }
         }
         @media (max-width: 1280px) {
             .team-member-name {
-                font-size: 4rem;
+                font-size: 2.5rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="overlay-container">
-        <!-- Placeholder for your custom image -->
-        <!-- Replace 'https://placehold.co/800x300/6366f1/ffffff?text=Your+Team+Logo' with your actual image URL -->
-        <!-- You can upload your image to the same GitHub repository and link it relative path, e.g., './images/your-logo.png' -->
-        <img id="customImage" src="https://placehold.co/800x300/6366f1/ffffff?text=Your+Team+Logo" alt="Team Logo" class="custom-image">
-
         <!-- Display area for the team member's name -->
         <div id="teamMemberName" class="team-member-name">
             Streamer Name
@@ -97,13 +85,6 @@
             } else {
                 teamMemberNameElement.textContent = 'Team Stream'; // Default text if no name is provided
             }
-
-            // Optional: If you want to dynamically change the image based on a URL parameter
-            // const imageUrl = urlParams.get('image');
-            // const customImageElement = document.getElementById('customImage');
-            // if (imageUrl) {
-            //     customImageElement.src = decodeURIComponent(imageUrl);
-            // }
         });
     </script>
 </body>
